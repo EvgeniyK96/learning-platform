@@ -239,7 +239,13 @@ class Command(BaseCommand):
         base = Path(settings.BASE_DIR) / "lessons"
         if not base.exists():
             raise CommandError("Папка lessons/ не найдена")
-        self.teacher = User.objects.filter(username="teacher").first()
+        self.teacher, created = User.objects.get_or_create(
+            username="teacher",
+            defaults={"first_name": "Иван", "last_name": "Преподавателев", "is_staff": True},
+        )
+        if created:
+            self.teacher.set_password("teacher12345")
+            self.teacher.save()
         only = options.get("only")
 
         for cfg in BIG_COURSES:

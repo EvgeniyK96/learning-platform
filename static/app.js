@@ -1519,7 +1519,11 @@ builtins.input = _cw_input
       <div class="lesson-actions no-print" style="justify-content:center;margin-top:24px">
         <button class="btn btn-primary" onclick="window.print()">Распечатать / сохранить PDF</button>
         <a class="btn btn-outline" href="#/dashboard">В личный кабинет</a>
-      </div>`;
+      </div>
+      <p class="form-hint no-print" style="text-align:center;margin-top:10px">
+        Формат печати: A4, альбомная ориентация — сертификат занимает ровно один лист.
+        Ориентация выбирается автоматически; если браузер спросит — укажите «Альбомная».
+      </p>`;
   }
 
   function pageLogin() {

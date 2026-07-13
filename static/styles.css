@@ -1597,25 +1597,172 @@ table.data tr:last-child td {
   .footer-grid { flex-direction: column; }
 }
 
+/* ---------- Печать сертификата: один лист A4, альбомная ориентация ---------- */
+@page {
+  size: A4 landscape;
+  margin: 0;
+}
+
 @media print {
 
   .site-header,
   .site-footer,
+  .toast,
   .no-print {
     display: none !important;
   }
 
+  html,
   body {
     background: #FFFFFF;
+    margin: 0;
+    padding: 0;
   }
 
   main.container {
     max-width: none;
-    padding: 0;
+    width: auto;
+    margin: 0;
+    padding: 0 !important;
   }
 
   .cert-wrap {
     overflow: visible;
+    padding: 0;
+  }
+
+  /* сертификат = ровно один лист: 279×192мм + поля 9мм сверху и по бокам */
+  .cert {
+    width: 279mm;
+    height: 192mm;
+    min-width: 0;
+    max-width: none;
+    margin: 9mm auto 0;
+    padding: 6mm;
+    border-radius: 0;
+    box-shadow: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    page-break-after: avoid;
+  }
+
+  .cert-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 40px 20px;
+  }
+
+  /* компактная типографика, чтобы всё гарантированно поместилось без наложений */
+  .cert-pill {
+    font-size: 12px;
+    padding: 8px 24px;
+  }
+
+  .cert-title {
+    font-size: 52px;
+    margin: 12px 0 4px;
+  }
+
+  .cert-sub {
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+
+  .cert-confirm {
+    font-size: 16px;
+    margin: 4px 0;
+  }
+
+  .cert-name-row {
+    gap: 18px;
+  }
+
+  .cert-name {
+    font-size: 44px;
+  }
+
+  .laurel {
+    width: 34px;
+    height: 74px;
+  }
+
+  .cert-star {
+    font-size: 16px;
+    margin: 2px 0 4px;
+  }
+
+  .cert-ribbon {
+    margin: 8px 0 4px;
+  }
+
+  .cert-ribbon .rb {
+    font-size: 25px;
+    padding: 12px 44px;
+  }
+
+  /* нижний блок прижат к низу листа, мотто в тёмном клине не пересекается с ним */
+  .cert-bottom {
+    margin-top: auto;
+    padding-top: 14px;
+    gap: 26px;
+  }
+
+  .cert-info {
+    font-size: 14px;
+    gap: 8px;
+  }
+
+  .cert-info .ico {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  .cert-seal {
+    width: 108px;
+    height: 108px;
+  }
+
+  .cert-sign {
+    padding-left: 26px;
+  }
+
+  .cert-sign .script {
+    font-size: 34px;
+  }
+
+  .cert-sign .who {
+    font-size: 15px;
+    margin-top: 6px;
+  }
+
+  .cert-sign .role {
+    font-size: 12.5px;
+  }
+
+  .cert-brandmark {
+    width: 110px;
+    top: 22px;
+    left: 28px;
+  }
+
+  .cert-langmark {
+    font-size: 50px;
+    top: 28px;
+    right: 34px;
+  }
+
+  .cert-motto {
+    width: 170px;
+    left: 22px;
+    bottom: 24px;
+    font-size: 13px;
+  }
+
+  .cert-motto .trophy {
+    font-size: 32px;
+    margin-bottom: 4px;
   }
 
   .cert,
