@@ -1,0 +1,11 @@
+/* CODE WAY: компактный логотип в админке (jazzmin) */
+.login-logo img,
+.login-box .login-logo img {
+  max-width: 110px;
+  height: auto;
+}
+
+.brand-link .brand-image {
+  max-height: 34px;
+  width: auto;
+}
