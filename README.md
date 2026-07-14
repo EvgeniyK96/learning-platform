@@ -95,7 +95,12 @@ core/               # настройки (django-environ), маршруты, JWT
                     # версия статики для сброса кэша (context_processors.py)
 lessons/            # markdown-контент курсов (модули, домашки, тесты)
 templates/index.html   # оболочка SPA
-static/app.js          # роутинг, страницы, markdown-рендер, IDE/терминал/SQL-консоль
+static/js/             # ES-модули SPA (main → router → pages/*, ide/*, nav, api, …)
+│   ├── main.js        #   точка входа: навигация + роутер
+│   ├── router.js      #   хеш-роутинг
+│   ├── api.js         #   fetch-обёртки, JWT, токены, тосты, esc
+│   ├── pages/         #   по модулю на страницу (home, courses, lesson, dashboard, …)
+│   └── ide/           #   IDE Python (Pyodide), JS-песочница, терминал, SQL-консоль
 static/styles.css      # дизайн-система CODE WAY
 ```
 
