@@ -9,6 +9,9 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, []),
     LANGUAGE_CODE=(str, "ru"),
     TIME_ZONE=(str, "Asia/Almaty"),
+    SECURE_SSL_REDIRECT=(bool, False),
+    SECURE_HSTS_SECONDS=(int, 0),
+    SECURE_PROXY_SSL_HEADER=(bool, False),
 )
 
 environ.Env.read_env(BASE_DIR / ".env")
@@ -17,7 +20,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "jazzmin",
@@ -94,6 +97,31 @@ MEDIA_ROOT = BASE_DIR / env("MEDIA_ROOT", default="media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# ---------- Безопасность (активна только вне DEBUG, управляется .env) ----------
+# Ограничение размера тела запроса (защита от DoS большими загрузками), 12 МБ
+DATA_UPLOAD_MAX_MEMORY_SIZE = 12 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 12 * 1024 * 1024
+
+if not DEBUG:
+    # HTTPS-редирект и заголовки за обратным прокси
+    SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT")
+    if env("SECURE_PROXY_SSL_HEADER"):
+        SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+    # Secure-only cookies — токен сессии/CSRF не уходят по HTTP
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_HTTPONLY = True
+
+    # HSTS
+    SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS")
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
+    # Прочие защитные заголовки
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = "DENY"
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -101,6 +129,14 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.ScopedRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        # анти-брутфорс на вход и защита от массовой регистрации
+        "auth": "10/min",
+        "register": "5/min",
+    },
 }
 
 SIMPLE_JWT = {

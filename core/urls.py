@@ -8,6 +8,8 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
+from core.auth_views import ThrottledTokenObtainPairView, ThrottledUserViewSet
+
 schema_view = get_schema_view(
     openapi.Info(
         title="CODE WAY API",
@@ -21,6 +23,17 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("", never_cache(TemplateView.as_view(template_name="index.html")), name="frontend"),
     path("admin/", admin.site.urls),
+    # троттлинг: переопределяем регистрацию и вход до подключения djoser
+    path(
+        "api/auth/users/",
+        ThrottledUserViewSet.as_view({"get": "list", "post": "create"}),
+        name="user-list-register",
+    ),
+    path(
+        "api/auth/jwt/create/",
+        ThrottledTokenObtainPairView.as_view(),
+        name="jwt-create-throttled",
+    ),
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
     path("api/users/", include("apps.users.urls")),

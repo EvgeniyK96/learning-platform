@@ -9,4 +9,5 @@ urlpatterns = [
     path("homeworks/<int:pk>/", views.HomeworkDetailView.as_view(), name="homework-detail"),
     path("homeworks/<int:pk>/submit/", views.HomeworkSubmitView.as_view(), name="homework-submit"),
     path("submissions/", views.MySubmissionsView.as_view(), name="my-submissions"),
+    path("submissions/<int:pk>/file/", views.SubmissionFileView.as_view(), name="submission-file"),
 ]

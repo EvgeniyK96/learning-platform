@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.http import FileResponse, Http404
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
@@ -139,4 +140,24 @@ class MySubmissionsView(generics.ListAPIView):
     def get_queryset(self):
         return HomeworkSubmission.objects.filter(user=self.request.user).select_related(
             "homework"
+        )
+
+
+class SubmissionFileView(APIView):
+    """Отдаёт файл решения только его автору или персоналу — как вложение."""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        submission = generics.get_object_or_404(HomeworkSubmission, pk=pk)
+        if submission.user != request.user and not request.user.is_staff:
+            raise PermissionDenied("Нет доступа к этому файлу.")
+        if not submission.file:
+            raise Http404("Файл не прикреплён.")
+        from pathlib import Path
+
+        return FileResponse(
+            submission.file.open("rb"),
+            as_attachment=True,
+            filename=Path(submission.file.name).name,
         )

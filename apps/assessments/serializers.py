@@ -1,6 +1,10 @@
+from pathlib import Path
+
+from django.urls import reverse
 from rest_framework import serializers
 
 from .models import Choice, Homework, HomeworkSubmission, Question, Quiz, QuizAttempt
+from .validators import validate_homework_file
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -68,11 +72,28 @@ class HomeworkSerializer(serializers.ModelSerializer):
 class HomeworkSubmissionSerializer(serializers.ModelSerializer):
     homework_title = serializers.CharField(source="homework.title", read_only=True)
     status_display = serializers.CharField(source="get_status_display", read_only=True)
+    # файл принимаем на загрузку, но наружу отдаём только защищённую ссылку
+    file = serializers.FileField(
+        write_only=True, required=False, allow_null=True,
+        validators=[validate_homework_file],
+    )
+    file_url = serializers.SerializerMethodField()
+    file_name = serializers.SerializerMethodField()
 
     class Meta:
         model = HomeworkSubmission
         fields = [
-            "id", "homework", "homework_title", "text", "file", "status",
-            "status_display", "grade", "teacher_comment", "submitted_at",
+            "id", "homework", "homework_title", "text", "file", "file_url", "file_name",
+            "status", "status_display", "grade", "teacher_comment", "submitted_at",
         ]
         read_only_fields = ["homework", "status", "grade", "teacher_comment", "submitted_at"]
+
+    def get_file_url(self, obj):
+        if not obj.file:
+            return None
+        return reverse("submission-file", args=[obj.id])
+
+    def get_file_name(self, obj):
+        if not obj.file:
+            return None
+        return Path(obj.file.name).name

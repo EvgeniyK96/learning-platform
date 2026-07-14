@@ -3,6 +3,8 @@ from django.db import models
 
 from apps.courses.models import Lesson, Module
 
+from .validators import validate_homework_file
+
 
 class Quiz(models.Model):
     """Тест урока (lesson) или итоговый тест модуля (module) — заполняется одно из двух."""
@@ -114,7 +116,10 @@ class HomeworkSubmission(models.Model):
         verbose_name="Пользователь",
     )
     text = models.TextField("Решение", blank=True)
-    file = models.FileField("Файл", upload_to="homework/", blank=True, null=True)
+    file = models.FileField(
+        "Файл", upload_to="homework/", blank=True, null=True,
+        validators=[validate_homework_file],
+    )
     status = models.CharField(
         "Статус", max_length=20, choices=Status.choices, default=Status.SUBMITTED
     )

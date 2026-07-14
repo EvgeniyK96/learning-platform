@@ -1236,6 +1236,10 @@ builtins.input = _cw_input
         ${statusBadge}
       </div>
       <div class="lesson-content">${esc(hw.description)}</div>
+      ${s && s.file_url ? `
+        <p class="form-hint" style="margin-bottom:16px">📎 Прикреплён файл:
+          <a href="#" id="hw-download" data-url="${esc(s.file_url)}" data-name="${esc(s.file_name || "файл")}">${esc(s.file_name || "скачать")}</a>
+        </p>` : ""}
       ${s && s.teacher_comment ? `
         <div class="card" style="margin-bottom:22px">
           <h3>Комментарий преподавателя</h3>
@@ -1253,9 +1257,28 @@ builtins.input = _cw_input
         <div class="field">
           <label for="hw-file">Файл (по желанию)</label>
           <input type="file" id="hw-file" name="file">
+          <p class="form-hint">До 10 МБ. Разрешены документы, архивы, изображения и файлы с кодом (не .exe/.bat и т.п.).</p>
         </div>
         <button class="btn btn-primary" type="submit">Отправить на проверку</button>
       </form>`}`;
+
+    const download = document.getElementById("hw-download");
+    if (download) {
+      download.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          const res = await api(download.dataset.url.replace("/api", ""));
+          if (!res.ok) throw new Error("Не удалось скачать файл");
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = download.dataset.name;
+          a.click();
+          URL.revokeObjectURL(url);
+        } catch (err) { toast(err.message); }
+      });
+    }
 
     const form = document.getElementById("hw-form");
     if (form) {
