@@ -9,7 +9,12 @@ import { pageQuiz } from "./pages/quiz.js";
 import { pageHomework } from "./pages/homework.js";
 import { pageDashboard } from "./pages/dashboard.js";
 import { pageCertificate } from "./pages/certificate.js";
-import { pageLogin, pageRegister, pageLogout } from "./pages/auth.js";
+import {
+  pageLogin,
+  pageRegister,
+  pageLogout,
+  pageTelegramLogin,
+} from "./pages/auth.js";
 
 const routes = [
   [/^#?\/?$/, pageHome],
@@ -25,6 +30,7 @@ const routes = [
   [/^#\/login$/, pageLogin],
   [/^#\/register$/, pageRegister],
   [/^#\/logout$/, pageLogout],
+  [/^#\/telegram-login$/, pageTelegramLogin],
 ];
 
 export async function route() {

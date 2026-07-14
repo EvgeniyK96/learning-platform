@@ -67,6 +67,10 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
 
+  <script type="importmap">{{ static_importmap|safe }}</script>
   <script type="module" src="/static/js/main.js?v={{ static_version }}"></script>
+  <script>
+    window.TELEGRAM_BOT_USERNAME = "{{ telegram_bot_username|default:'' }}";
+  </script>
 </body>
 </html>

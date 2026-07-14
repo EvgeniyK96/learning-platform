@@ -7,3 +7,4 @@ django-environ
 django-jazzmin
 Pillow
 psycopg2-binary
+telegram-gateway-verification
