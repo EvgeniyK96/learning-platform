@@ -1,26 +1,36 @@
-/* CODE WAY — дизайн-система по рекомендациям ui-ux-pro-max:
-   стиль: Flat Design + Accessible (LMS)
-   палитра: фирменные цвета логотипа — navy #16243D + learning blue #2563EB
+/* CODE WAY — дизайн-система в стиле Starbucks:
+   стиль: тёплый минимализм + таблетковидные кнопки + много воздуха
+   палитра: Starbucks green #00704A + house green #1E3932 + кремовый фон
    шрифт: Inter (system-first) */
 
 :root {
-  --primary: #2563EB;
-  --primary-dark: #1D4ED8;
+  --primary: #00704A;
+  --primary-dark: #1E3932;
   --on-primary: #FFFFFF;
-  --secondary: #3B82F6;
-  --accent: #16243D;
+  --secondary: #1E3932;
+  --accent: #1E3932;
   --on-accent: #FFFFFF;
-  --background: #F4F8FE;
-  --foreground: #16243D;
+  --background: #F7F5F0;
+  --foreground: #1E3932;
   --card: #FFFFFF;
-  --muted: #E8EFF9;
-  --muted-foreground: #325899;
-  --border: #D6E4F5;
-  --destructive: #DC2626;
-  --success: #16A34A;
-  --ring: #2563EB;
-  --radius: 10px;
-  --shadow: 0 1px 3px rgba(22, 36, 61, 0.08), 0 4px 16px rgba(22, 36, 61, 0.06);
+  --muted: #EAF1EE;
+  --muted-foreground: #4A6E60;
+  --border: #DCE6E1;
+  --destructive: #C0392B;
+  --success: #1E7A46;
+  --gold: #CBA258;
+  --ring: #00704A;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  /* фирменные градиенты */
+  --gradient-primary: linear-gradient(135deg, #00754A 0%, #1E3932 100%);
+  --gradient-accent: linear-gradient(135deg, #1E3932 0%, #00704A 100%);
+  /* многослойная тень для мягкой, современной глубины */
+  --shadow: 0 1px 2px rgba(30, 57, 50, 0.06), 0 4px 14px rgba(30, 57, 50, 0.07);
+  --shadow-md: 0 4px 10px rgba(30, 57, 50, 0.08), 0 12px 30px rgba(30, 57, 50, 0.10);
+  --shadow-lg: 0 10px 20px rgba(30, 57, 50, 0.10), 0 24px 56px rgba(30, 57, 50, 0.16);
+  --shadow-primary: 0 6px 16px rgba(0, 112, 74, 0.26);
 }
 
 * {
@@ -54,6 +64,19 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+/* ---------- Иконки ---------- */
+.ico {
+  width: 1.15em;
+  height: 1.15em;
+  flex: none;
+  vertical-align: -0.18em;
+}
+
+.ico-lg {
+  width: 26px;
+  height: 26px;
 }
 
 .container {
@@ -101,8 +124,11 @@ select:focus-visible,
 
 /* ---------- Шапка ---------- */
 .site-header {
-  background: var(--card);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 6px 20px rgba(22, 36, 61, 0.05);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -261,7 +287,7 @@ select:focus-visible,
 
 .user-btn:hover {
   border-color: var(--primary);
-  box-shadow: 0 4px 14px rgba(37, 99, 235, .18);
+  box-shadow: 0 4px 14px rgba(0, 112, 74, .18);
   transform: translateY(-1px);
 }
 
@@ -276,7 +302,7 @@ select:focus-visible,
 
 .nav-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(37, 99, 235, .28);
+  box-shadow: 0 8px 20px rgba(0, 112, 74, .28);
 }
 
 .nav-btn:active {
@@ -329,12 +355,26 @@ select:focus-visible,
 }
 
 .user-dropdown a {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 10px 14px;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
   color: var(--foreground);
+}
+
+.user-dropdown a .ico {
+  color: var(--muted-foreground);
+}
+
+.user-dropdown a:hover .ico {
+  color: var(--primary);
+}
+
+.user-dropdown .user-logout .ico {
+  color: var(--destructive);
 }
 
 .user-dropdown a:hover {
@@ -359,8 +399,8 @@ select:focus-visible,
   font-weight: 700;
   font-size: 15px;
   border: 2px solid transparent;
-  border-radius: var(--radius);
-  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  padding: 11px 26px;
   cursor: pointer;
   text-decoration: none;
   transition: background-color .15s, color .15s, border-color .15s,
@@ -368,21 +408,28 @@ select:focus-visible,
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: var(--gradient-primary);
   color: var(--on-primary);
+  box-shadow: var(--shadow-primary);
 }
 
 .btn-primary:hover {
-  background: var(--primary-dark);
+  background: var(--gradient-primary);
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 112, 74, 0.34);
 }
 
 .btn-accent {
   background: #ffffff;
-  color: var(--primary-dark);
+  color: var(--primary);
+  box-shadow: 0 8px 20px rgba(30, 57, 50, 0.22);
 }
 
 .btn-accent:hover {
-  background: #DBEAFE;
+  background: #D4E9E2;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(30, 57, 50, 0.28);
 }
 
 .btn-outline {
@@ -394,11 +441,19 @@ select:focus-visible,
 .btn-outline:hover {
   background: var(--primary);
   color: var(--on-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary);
+}
+
+.btn:active {
+  transform: translateY(0);
 }
 
 .btn:disabled {
   opacity: .55;
   cursor: not-allowed;
+  transform: none;
+  filter: none;
 }
 
 .btn-sm {
@@ -410,11 +465,11 @@ select:focus-visible,
 .hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #16243D 0%, #1D4ED8 45%, #2F80ED 75%, #1D4ED8 100%);
+  background: linear-gradient(135deg, #1E3932 0%, #006241 45%, #00754A 75%, #1E3932 100%);
   background-size: 200% 200%;
   animation: hero-shift 14s ease infinite;
-  color: #DBEAFE;
-  border-radius: 16px;
+  color: #D4E9E2;
+  border-radius: var(--radius-lg);
   padding: 56px 40px;
   margin-bottom: 40px;
 }
@@ -529,56 +584,60 @@ select:focus-visible,
   align-items: center;
 }
 
-/* ---------- карточка курса: матовое стекло ---------- */
+/* ---------- карточка курса: чистая, image-first (в духе Starbucks) ---------- */
 .course-card {
   padding-top: 0;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(150deg, rgba(255, 255, 255, .78), rgba(240, 246, 255, .55));
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, .7);
-  box-shadow: 0 8px 30px rgba(22, 36, 61, .09), inset 0 1px 0 rgba(255, 255, 255, .6);
-  transition: transform .32s cubic-bezier(.34, 1.56, .64, 1), box-shadow .32s;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
 }
 
-/* блик-полоса, проходящая по стеклу при наведении */
+/* тонкая фирменная полоса сверху, «прорастает» при наведении */
 .course-card::before {
   content: "";
   position: absolute;
   top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .45), transparent);
-  transform: skewX(-20deg);
-  transition: left .6s ease;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s ease;
+  z-index: 3;
   pointer-events: none;
-  z-index: 2;
 }
 
 .course-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 22px 46px rgba(22, 36, 61, .18), inset 0 1px 0 rgba(255, 255, 255, .7);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
 }
 
 .course-card:hover::before {
-  left: 130%;
+  transform: scaleX(1);
+}
+
+.course-card .course-cover,
+.course-card .course-cover-img {
+  transition: transform .5s cubic-bezier(.22, 1, .36, 1);
+}
+
+.course-card:hover .course-cover,
+.course-card:hover .course-cover-img {
+  transform: scale(1.06);
 }
 
 .course-card:hover .course-cover .cover-icon {
-  transform: scale(1.15) rotate(-6deg);
+  transform: scale(1.12) rotate(-4deg);
 }
 
 .cover-icon {
   transition: transform .35s cubic-bezier(.34, 1.56, .64, 1);
-}
-
-@media (prefers-color-scheme: dark) {
-  .course-card {
-    background: linear-gradient(150deg, rgba(30, 41, 66, .6), rgba(22, 36, 61, .45));
-    border-color: rgba(255, 255, 255, .12);
-  }
 }
 
 /* появление карточек (backwards: держит скрытое состояние только до старта,
@@ -625,8 +684,8 @@ select:focus-visible,
   align-items: center;
   justify-content: center;
   gap: 12px;
-  height: 130px;
-  margin: 0 -22px 6px;
+  height: 158px;
+  margin: 0 -22px 10px;
   border-radius: 0;
 }
 
@@ -651,6 +710,99 @@ select:focus-visible,
 /* ---------- блок «О школе» ---------- */
 .about-block {
   margin-top: 46px;
+}
+
+/* ---------- Блок преимуществ ---------- */
+.features-block {
+  margin: 40px 0 8px;
+}
+
+.features-grid {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 26px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+.feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--muted);
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.feature-icon .ico {
+  width: 26px;
+  height: 26px;
+}
+
+.feature-card h3 {
+  margin: 0;
+  font-size: 17.5px;
+  letter-spacing: -0.3px;
+}
+
+.feature-card p {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+
+/* ---------- CTA-полоса ---------- */
+.cta-band {
+  margin: 52px 0 8px;
+  background: var(--gradient-accent);
+  border-radius: var(--radius-lg);
+  padding: 40px 44px;
+  color: #fff;
+  box-shadow: var(--shadow-md);
+}
+
+.cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cta-band h2 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+}
+
+.cta-band p {
+  margin: 0;
+  color: #D4E9E2;
+  max-width: 560px;
+  font-size: 16px;
+}
+
+.cta-band .btn-accent {
+  flex: none;
 }
 
 .about-grid {
@@ -763,7 +915,7 @@ select:focus-visible,
 }
 
 .badge-lang {
-  background: #DBEAFE;
+  background: #D4E9E2;
   color: #1E40AF;
 }
 
@@ -799,8 +951,9 @@ select:focus-visible,
 
 .progress-bar {
   height: 100%;
-  background: var(--primary);
+  background: var(--gradient-primary);
   border-radius: 999px;
+  transition: width .5s cubic-bezier(.4, 0, .2, 1);
 }
 
 .progress-label {
@@ -850,7 +1003,7 @@ select:focus-visible,
 .field textarea:focus {
   border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, .2);
+  box-shadow: 0 0 0 3px rgba(0, 112, 74, .2);
 }
 
 .field textarea {
@@ -926,7 +1079,19 @@ select:focus-visible,
 .lesson-status {
   font-size: 20px;
   width: 28px;
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted-foreground);
+}
+
+.lesson-status .ico {
+  width: 20px;
+  height: 20px;
+}
+
+.lesson-status.is-done {
+  color: var(--success);
 }
 
 .lesson-duration {
@@ -1431,6 +1596,18 @@ select:focus-visible,
   font-weight: 800;
   letter-spacing: -0.5px;
   margin: 34px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title::before {
+  content: "";
+  width: 5px;
+  height: 1.05em;
+  border-radius: 4px;
+  background: var(--gradient-primary);
+  flex: none;
 }
 
 .table-wrap {
@@ -1748,6 +1925,17 @@ table.data tr:last-child td {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.cert-info .cert-ico {
+  color: var(--gold, #CBA258);
+  width: 20px;
+  height: 20px;
+}
+
+.cert-langmark .ico {
+  width: 1em;
+  height: 1em;
 }
 
 .cert-info .ico {
