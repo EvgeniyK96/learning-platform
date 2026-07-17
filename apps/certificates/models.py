@@ -1,6 +1,6 @@
 import uuid
 
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 
 from apps.courses.models import Course
@@ -12,7 +12,7 @@ def generate_number():
 
 class Certificate(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="certificates", verbose_name="Пользователь"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="certificates", verbose_name="Пользователь"
     )
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, related_name="certificates", verbose_name="Курс"

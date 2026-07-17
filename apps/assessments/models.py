@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 
 from apps.courses.models import Lesson, Module
@@ -67,7 +67,7 @@ class Choice(models.Model):
 
 class QuizAttempt(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="quiz_attempts", verbose_name="Пользователь"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="quiz_attempts", verbose_name="Пользователь"
     )
     quiz = models.ForeignKey(
         Quiz, on_delete=models.CASCADE, related_name="attempts", verbose_name="Тест"
@@ -112,7 +112,7 @@ class HomeworkSubmission(models.Model):
         verbose_name="Домашнее задание",
     )
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="homework_submissions",
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="homework_submissions",
         verbose_name="Пользователь",
     )
     text = models.TextField("Решение", blank=True)

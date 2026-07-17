@@ -49,6 +49,8 @@ class MyEnrollmentsView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Enrollment.objects.none()
         return Enrollment.objects.filter(user=self.request.user).select_related("course")
 
 
@@ -59,6 +61,8 @@ class LessonDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Lesson.objects.none()
         return Lesson.objects.filter(
             module__course__enrollments__user=self.request.user
         )

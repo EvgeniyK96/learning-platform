@@ -20,7 +20,12 @@ SECRET_KEY = env("SECRET_KEY")
 
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ["*"]
+# из .env (через запятую); пустое значение = "*" для локальной разработки
+ALLOWED_HOSTS = env("ALLOWED_HOSTS") or ["*"]
+
+# доверенные origin для CSRF (нужно для входа в админку за HTTPS-прокси),
+# например: https://example.com,https://www.example.com
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 INSTALLED_APPS = [
     "jazzmin",
@@ -97,6 +102,8 @@ MEDIA_ROOT = BASE_DIR / env("MEDIA_ROOT", default="media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+AUTH_USER_MODEL = "users.User"
+
 # ---------- Безопасность (активна только вне DEBUG, управляется .env) ----------
 # Ограничение размера тела запроса (защита от DoS большими загрузками), 12 МБ
 DATA_UPLOAD_MAX_MEMORY_SIZE = 12 * 1024 * 1024
@@ -144,7 +151,11 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
-    "SERIALIZERS": {},
+    "SERIALIZERS": {
+        # единый сериализатор пользователя (свой, вместо дублирующего djoser-овского)
+        "user": "apps.users.serializers.UserSerializer",
+        "current_user": "apps.users.serializers.UserSerializer",
+    },
 }
 
 JAZZMIN_SETTINGS = {

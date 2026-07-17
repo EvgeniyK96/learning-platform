@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 
 
@@ -22,7 +22,7 @@ class Course(models.Model):
     level = models.CharField("Уровень", max_length=20, choices=Level.choices, default=Level.BEGINNER)
     language = models.CharField("Язык программирования", max_length=50, blank=True)
     teacher = models.ForeignKey(
-        User, on_delete=models.SET_NULL, null=True, related_name="taught_courses",
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="taught_courses",
         verbose_name="Преподаватель",
     )
     runner = models.CharField(
@@ -91,7 +91,7 @@ class Lesson(models.Model):
 
 class Enrollment(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="enrollments", verbose_name="Пользователь"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="enrollments", verbose_name="Пользователь"
     )
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, related_name="enrollments", verbose_name="Курс"
@@ -111,7 +111,7 @@ class Enrollment(models.Model):
 
 class LessonProgress(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="lesson_progress", verbose_name="Пользователь"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="lesson_progress", verbose_name="Пользователь"
     )
     lesson = models.ForeignKey(
         Lesson, on_delete=models.CASCADE, related_name="progress", verbose_name="Урок"

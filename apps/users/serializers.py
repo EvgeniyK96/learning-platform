@@ -1,31 +1,52 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from .models import Profile
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ["avatar", "bio", "created_at"]
-        read_only_fields = ["created_at"]
+User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
-
     class Meta:
         model = User
-        fields = ["id", "username", "email", "first_name", "last_name", "profile"]
-        read_only_fields = ["id", "username"]
+        ref_name = "User"
+        fields = [
+            "id", "username", "email", "first_name", "last_name",
+            "avatar", "bio", "date_joined",
+        ]
+        read_only_fields = ["id", "username", "date_joined"]
 
-    def update(self, instance, validated_data):
-        profile_data = validated_data.pop("profile", None)
-        instance = super().update(instance, validated_data)
-        if profile_data is not None:
-            profile_serializer = ProfileSerializer(
-                instance.profile, data=profile_data, partial=True
-            )
-            profile_serializer.is_valid(raise_exception=True)
-            profile_serializer.save()
-        return instance
+
+class DashboardSerializer(serializers.Serializer):
+    """Сводка личного кабинета; сериализуемый объект — текущий пользователь."""
+
+    user = UserSerializer(source="*", read_only=True)
+    enrollments = serializers.SerializerMethodField()
+    certificates_count = serializers.SerializerMethodField()
+    quizzes_passed = serializers.SerializerMethodField()
+    homeworks_accepted = serializers.SerializerMethodField()
+
+    def get_enrollments(self, obj):
+        from apps.courses.models import Enrollment
+        from apps.courses.serializers import EnrollmentSerializer
+
+        enrollments = Enrollment.objects.filter(user=obj).select_related("course")
+        return EnrollmentSerializer(enrollments, many=True, context=self.context).data
+
+    def get_certificates_count(self, obj):
+        from apps.certificates.models import Certificate
+
+        return Certificate.objects.filter(user=obj).count()
+
+    def get_quizzes_passed(self, obj):
+        from apps.assessments.models import QuizAttempt
+
+        return (
+            QuizAttempt.objects.filter(user=obj, passed=True)
+            .values("quiz").distinct().count()
+        )
+
+    def get_homeworks_accepted(self, obj):
+        from apps.assessments.models import HomeworkSubmission
+
+        return HomeworkSubmission.objects.filter(
+            user=obj, status=HomeworkSubmission.Status.ACCEPTED
+        ).count()

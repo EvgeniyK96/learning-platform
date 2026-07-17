@@ -38,6 +38,8 @@ class QuizDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Quiz.objects.none()
         return _enrolled_quizzes(self.request.user)
 
     def get_object(self):
@@ -105,6 +107,8 @@ class MyAttemptsView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return QuizAttempt.objects.none()
         return QuizAttempt.objects.filter(user=self.request.user).select_related("quiz")
 
 
@@ -113,6 +117,8 @@ class HomeworkDetailView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Homework.objects.none()
         return Homework.objects.filter(
             lesson__module__course__enrollments__user=self.request.user
         )
@@ -121,6 +127,7 @@ class HomeworkDetailView(generics.RetrieveAPIView):
 class HomeworkSubmitView(generics.CreateAPIView):
     """Отправка решения домашнего задания (текст и/или файл)."""
 
+    queryset = HomeworkSubmission.objects.none()
     serializer_class = HomeworkSubmissionSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -138,6 +145,8 @@ class MySubmissionsView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return HomeworkSubmission.objects.none()
         return HomeworkSubmission.objects.filter(user=self.request.user).select_related(
             "homework"
         )

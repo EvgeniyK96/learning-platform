@@ -9,6 +9,8 @@ class MyCertificatesView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Certificate.objects.none()
         return Certificate.objects.filter(user=self.request.user).select_related(
             "course", "user"
         )

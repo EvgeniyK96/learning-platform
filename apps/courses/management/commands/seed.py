@@ -1,6 +1,6 @@
 """Наполнение базы демо-данными: python manage.py seed"""
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
 from apps.assessments.models import Choice, Homework, Question, Quiz
@@ -131,7 +131,7 @@ class Command(BaseCommand):
     help = "Наполняет базу демо-курсами, тестами и домашними заданиями"
 
     def handle(self, *args, **options):
-        teacher, created = User.objects.get_or_create(
+        teacher, created = get_user_model().objects.get_or_create(
             username="teacher",
             defaults={"first_name": "Иван", "last_name": "Преподавателев", "is_staff": True},
         )

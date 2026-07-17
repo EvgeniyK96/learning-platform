@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.assessments.models import Choice, Homework, Question, Quiz
@@ -239,7 +239,7 @@ class Command(BaseCommand):
         base = Path(settings.BASE_DIR) / "lessons"
         if not base.exists():
             raise CommandError("Папка lessons/ не найдена")
-        self.teacher, created = User.objects.get_or_create(
+        self.teacher, created = get_user_model().objects.get_or_create(
             username="teacher",
             defaults={"first_name": "Иван", "last_name": "Преподавателев", "is_staff": True},
         )
