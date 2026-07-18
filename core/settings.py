@@ -12,6 +12,7 @@ env = environ.Env(
     SECURE_SSL_REDIRECT=(bool, False),
     SECURE_HSTS_SECONDS=(int, 0),
     SECURE_PROXY_SSL_HEADER=(bool, False),
+    SECURE_COOKIES=(bool, True),
 )
 
 environ.Env.read_env(BASE_DIR / ".env")
@@ -115,9 +116,10 @@ if not DEBUG:
     if env("SECURE_PROXY_SSL_HEADER"):
         SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-    # Secure-only cookies — токен сессии/CSRF не уходят по HTTP
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
+    # Secure-only cookies — токен сессии/CSRF не уходят по HTTP.
+    # SECURE_COOKIES=False — временный режим для прода без HTTPS (доступ по IP)
+    SESSION_COOKIE_SECURE = env("SECURE_COOKIES")
+    CSRF_COOKIE_SECURE = env("SECURE_COOKIES")
     SESSION_COOKIE_HTTPONLY = True
 
     # HSTS
