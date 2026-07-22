@@ -40,6 +40,8 @@ urlpatterns = [
     path("api/courses/", include("apps.courses.urls")),
     path("api/assessments/", include("apps.assessments.urls")),
     path("api/certificates/", include("apps.certificates.urls")),
+    path("api/teaching/", include("apps.teaching.urls")),
+    path("api/chat/", include("apps.chat.urls")),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),

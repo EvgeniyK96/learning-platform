@@ -3,6 +3,18 @@ import { apiJson, tokens, toast } from "../api.js";
 import { app } from "../dom.js";
 import { renderNav } from "../nav.js";
 
+/* Подтягивает роль пользователя (is_teacher) и кладёт в localStorage —
+   от неё зависят пункты меню и стартовая страница после входа. */
+async function storeRole() {
+  try {
+    const me = await apiJson("/users/me/");
+    if (me.is_teacher) localStorage.setItem("is_teacher", "1");
+    else localStorage.removeItem("is_teacher");
+  } catch (_) {
+    localStorage.removeItem("is_teacher");
+  }
+}
+
 export function pageLogin() {
   app.innerHTML = `
     <div class="form">
@@ -35,9 +47,10 @@ export function pageLogin() {
       });
       tokens.set(data.access, data.refresh);
       localStorage.setItem("username", document.getElementById("lg-username").value);
+      await storeRole();
       renderNav();
       toast("Добро пожаловать!");
-      location.hash = "#/dashboard";
+      location.hash = localStorage.getItem("is_teacher") ? "#/teach" : "#/dashboard";
     } catch (ex) {
       err.textContent = "Неверный логин или пароль.";
       err.hidden = false;
@@ -94,6 +107,7 @@ export function pageRegister() {
       });
       tokens.set(data.access, data.refresh);
       localStorage.setItem("username", username);
+      await storeRole();
       renderNav();
       toast("Аккаунт создан. Добро пожаловать!");
       location.hash = "#/courses";
@@ -107,6 +121,7 @@ export function pageRegister() {
 export function pageLogout() {
   tokens.clear();
   localStorage.removeItem("username");
+  localStorage.removeItem("is_teacher");
   renderNav();
   toast("Вы вышли из аккаунта.");
   location.hash = "#/";

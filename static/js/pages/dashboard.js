@@ -101,7 +101,7 @@ export async function pageDashboard(tab) {
         </div>
         <div class="field">
           <label for="pf-bio">О себе</label>
-          <textarea id="pf-bio">${esc(u.profile?.bio || "")}</textarea>
+          <textarea id="pf-bio">${esc(u.bio || "")}</textarea>
         </div>
         <button class="btn btn-primary" type="submit">Сохранить</button>
       </form>`,
@@ -139,7 +139,7 @@ export async function pageDashboard(tab) {
           first_name: document.getElementById("pf-first").value,
           last_name: document.getElementById("pf-last").value,
           email: document.getElementById("pf-email").value,
-          profile: { bio: document.getElementById("pf-bio").value },
+          bio: document.getElementById("pf-bio").value,
         }),
       });
       toast("Профиль сохранён.");

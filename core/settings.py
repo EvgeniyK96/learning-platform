@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "apps.courses",
     "apps.assessments",
     "apps.certificates",
+    "apps.teaching",
+    "apps.chat",
     # LOCAL_APPS_MARKER — не удаляй эту строку, она используется create_app.py
 ]
 

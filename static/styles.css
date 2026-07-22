@@ -2434,3 +2434,209 @@ table.data tr:last-child td {
     print-color-adjust: exact !important;
   }
 }
+
+/* ============================================================
+   Кабинет преподавателя и чат (добавлено)
+   ============================================================ */
+
+/* — иконка чата и бейдж непрочитанных в навигации — */
+.nav-chat {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  color: var(--foreground);
+  transition: background 0.15s;
+}
+.nav-chat:hover { background: var(--muted); }
+.nav-chat-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--destructive);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* — счётчик в пункте бокового меню — */
+.menu-badge {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* — фильтры-чипы — */
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.chip {
+  padding: 7px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  color: var(--muted-foreground);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chip:hover { border-color: var(--primary); color: var(--primary); }
+.chip-active { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+
+/* — карточки сдач ДЗ — */
+.sub-list { display: flex; flex-direction: column; gap: 16px; }
+.sub-card { padding: 20px; }
+.sub-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.sub-meta { color: var(--muted-foreground); font-size: 13px; }
+.sub-student {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 12px; font-weight: 600;
+}
+.sub-student .btn { margin-left: auto; }
+.sub-text {
+  background: var(--muted);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin: 0 0 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 14px;
+  max-height: 260px;
+  overflow: auto;
+}
+.sub-review { border-top: 1px solid var(--border); padding-top: 14px; }
+.sub-review-row { display: flex; gap: 14px; flex-wrap: wrap; }
+.field-inline { max-width: 200px; }
+.sub-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+
+/* — курсы преподавателя — */
+.teach-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.teach-course { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.teach-course h3 { margin: 0; }
+.teach-course-stats { display: flex; flex-direction: column; gap: 8px; color: var(--muted-foreground); font-size: 14px; }
+.teach-course-stats span { display: inline-flex; align-items: center; gap: 8px; }
+.teach-course .btn { margin-top: auto; align-self: flex-start; }
+.text-pending { color: var(--gold); font-weight: 600; }
+
+/* — мини-полоса прогресса в таблице — */
+.mini-bar {
+  width: 90px; height: 6px; border-radius: 3px;
+  background: var(--muted); overflow: hidden; display: inline-block; vertical-align: middle;
+}
+.mini-bar span { display: block; height: 100%; background: var(--primary); border-radius: 3px; }
+
+/* ============================================================
+   Мессенджер
+   ============================================================ */
+.chat {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 0;
+  height: calc(100vh - 220px);
+  min-height: 460px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: var(--shadow);
+}
+
+.chat-contacts { border-right: 1px solid var(--border); overflow-y: auto; background: var(--card); }
+.chat-contacts-head {
+  padding: 16px 18px; font-weight: 700; font-size: 16px;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--card); z-index: 1;
+}
+.chat-contact {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid var(--border);
+  color: var(--foreground); transition: background 0.12s;
+}
+.chat-contact:hover { background: var(--muted); }
+.chat-contact.active { background: var(--muted); }
+.chat-avatar {
+  flex: none;
+  width: 42px; height: 42px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--gradient-primary); color: #fff; font-weight: 700;
+}
+.chat-contact-main { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.chat-contact-name { font-weight: 600; display: flex; align-items: center; gap: 6px; }
+.chat-role {
+  font-size: 11px; font-weight: 600; color: var(--primary);
+  background: var(--muted); padding: 1px 6px; border-radius: var(--radius-pill);
+}
+.chat-contact-last {
+  color: var(--muted-foreground); font-size: 13px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.chat-unread {
+  flex: none; min-width: 20px; height: 20px; padding: 0 6px;
+  border-radius: 10px; background: var(--primary); color: var(--on-primary);
+  font-size: 12px; font-weight: 700; line-height: 20px; text-align: center;
+}
+
+.chat-thread { display: flex; flex-direction: column; min-width: 0; }
+.chat-empty {
+  margin: auto; text-align: center; color: var(--muted-foreground);
+  display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 30px;
+}
+.chat-empty .ico { width: 44px; height: 44px; opacity: 0.5; }
+.chat-thread-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 18px; border-bottom: 1px solid var(--border);
+}
+.chat-thread-name { font-weight: 700; }
+.chat-back { display: none; color: var(--foreground); }
+
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: 20px;
+  display: flex; flex-direction: column; gap: 10px;
+  background: var(--background);
+}
+.chat-msg { max-width: 74%; align-self: flex-start; }
+.chat-msg.mine { align-self: flex-end; }
+.chat-bubble {
+  padding: 10px 14px; border-radius: 16px;
+  background: var(--card); border: 1px solid var(--border);
+  white-space: pre-wrap; word-break: break-word;
+}
+.chat-msg.mine .chat-bubble {
+  background: var(--primary); color: var(--on-primary); border-color: var(--primary);
+}
+.chat-time { font-size: 11px; color: var(--muted-foreground); margin-top: 3px; padding: 0 4px; }
+.chat-msg.mine .chat-time { text-align: right; }
+
+.chat-input {
+  display: flex; gap: 10px; padding: 12px 14px;
+  border-top: 1px solid var(--border); background: var(--card);
+}
+.chat-input textarea {
+  flex: 1; resize: none; max-height: 120px;
+  padding: 10px 14px; border: 1px solid var(--border);
+  border-radius: var(--radius); font: inherit; background: var(--card); color: var(--foreground);
+}
+.chat-input .btn { flex: none; align-self: flex-end; padding: 10px 16px; }
+
+/* мобильная версия: одна колонка, переключение список ⇄ переписка */
+@media (max-width: 760px) {
+  .chat { grid-template-columns: 1fr; height: calc(100vh - 160px); }
+  .chat .chat-thread { display: none; }
+  .chat[data-open] .chat-contacts { display: none; }
+  .chat[data-open] .chat-thread { display: flex; }
+  .chat-back { display: inline-flex; }
+  .chat-msg { max-width: 85%; }
+}

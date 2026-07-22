@@ -1,6 +1,7 @@
 /* Хеш-роутер: сопоставляет location.hash со страницей и рендерит её. */
 import { esc } from "./api.js";
 import { app } from "./dom.js";
+import { stopPolling } from "./poll.js";
 import { pageHome } from "./pages/home.js";
 import { pageCourses } from "./pages/courses.js";
 import { pageCourse } from "./pages/course.js";
@@ -9,6 +10,8 @@ import { pageQuiz } from "./pages/quiz.js";
 import { pageHomework } from "./pages/homework.js";
 import { pageDashboard } from "./pages/dashboard.js";
 import { pageCertificate } from "./pages/certificate.js";
+import { pageTeach } from "./pages/teach.js";
+import { pageChat } from "./pages/chat.js";
 import { pageLogin, pageRegister, pageLogout } from "./pages/auth.js";
 
 const routes = [
@@ -21,6 +24,8 @@ const routes = [
   [/^#\/quiz\/(\d+)$/, pageQuiz],
   [/^#\/homework\/(\d+)$/, pageHomework],
   [/^#\/dashboard(?:\/([a-z]+))?$/, pageDashboard],
+  [/^#\/teach(?:\/([a-z]+))?$/, pageTeach],
+  [/^#\/chat(?:\/(\d+))?$/, pageChat],
   [/^#\/certificate\/([A-Za-z0-9]+)$/, pageCertificate],
   [/^#\/login$/, pageLogin],
   [/^#\/register$/, pageRegister],
@@ -28,6 +33,7 @@ const routes = [
 ];
 
 export async function route() {
+  stopPolling();
   const hash = location.hash || "#/";
   for (const [re, handler] of routes) {
     const m = hash.match(re);

@@ -10,9 +10,9 @@ class UserSerializer(serializers.ModelSerializer):
         ref_name = "User"
         fields = [
             "id", "username", "email", "first_name", "last_name",
-            "avatar", "bio", "date_joined",
+            "avatar", "bio", "is_teacher", "date_joined",
         ]
-        read_only_fields = ["id", "username", "date_joined"]
+        read_only_fields = ["id", "username", "is_teacher", "date_joined"]
 
 
 class DashboardSerializer(serializers.Serializer):

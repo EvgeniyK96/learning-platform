@@ -159,7 +159,13 @@ class SubmissionFileView(APIView):
 
     def get(self, request, pk):
         submission = generics.get_object_or_404(HomeworkSubmission, pk=pk)
-        if submission.user != request.user and not request.user.is_staff:
+        course = submission.homework.lesson.module.course
+        is_owner = submission.user_id == request.user.id
+        is_course_teacher = (
+            getattr(request.user, "is_teacher", False)
+            and course.teacher_id == request.user.id
+        )
+        if not (is_owner or request.user.is_staff or is_course_teacher):
             raise PermissionDenied("Нет доступа к этому файлу.")
         if not submission.file:
             raise Http404("Файл не прикреплён.")
