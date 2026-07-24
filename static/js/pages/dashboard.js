@@ -7,6 +7,11 @@ import { icon } from "../icons.js";
 
 export async function pageDashboard(tab) {
   if (!requireAuth()) return;
+  // преподаватель не обучается как ученик — уводим в его кабинет
+  if (localStorage.getItem("is_teacher")) {
+    location.hash = "#/teach";
+    return;
+  }
   tab = tab || "overview";
   const [d, certs, attempts, submissions] = await Promise.all([
     apiJson("/users/dashboard/"),

@@ -8,6 +8,7 @@ const TEACH_TABS = [
   ["submissions", "clipboard-check", "Проверка ДЗ"],
   ["courses", "book", "Мои курсы"],
   ["students", "users", "Ученики"],
+  ["profile", "settings", "Настройки профиля"],
 ];
 
 const STATUS_BADGE = {
@@ -46,7 +47,6 @@ export async function pageTeach(tab) {
                 ? `<span class="menu-badge">${overview.pending_submissions}</span>` : ""}
             </a>`).join("")}
           <a href="#/chat">${icon("message-square")} Сообщения</a>
-          <a href="#/dashboard">${icon("user")} Как ученик</a>
           <a href="#/logout" class="dash-logout">${icon("log-out")} Выйти</a>
         </nav>
       </aside>
@@ -60,6 +60,7 @@ export async function pageTeach(tab) {
     if (tab === "submissions") await renderSubmissions(box);
     else if (tab === "courses") await renderCourses(box);
     else if (tab === "students") await renderStudents(box);
+    else if (tab === "profile") await renderProfile(box);
   } catch (e) {
     box.innerHTML = `<p class="empty">${esc(e.message)}</p>`;
   }
@@ -225,6 +226,49 @@ async function renderStudents(box) {
 
   document.getElementById("stu-course").addEventListener("change", (e) => load(e.target.value));
   load(current);
+}
+
+/* ---------- Настройки профиля ---------- */
+
+async function renderProfile(box) {
+  const u = await apiJson("/users/me/");
+  box.innerHTML = `
+    <h2 class="dash-title">Настройки профиля</h2>
+    <form class="form-card" id="teach-profile" style="max-width:520px">
+      <div class="field">
+        <label for="tp-first">Имя</label>
+        <input id="tp-first" autocomplete="given-name" value="${esc(u.first_name)}">
+      </div>
+      <div class="field">
+        <label for="tp-last">Фамилия</label>
+        <input id="tp-last" autocomplete="family-name" value="${esc(u.last_name)}">
+      </div>
+      <div class="field">
+        <label for="tp-email">Email</label>
+        <input id="tp-email" type="email" autocomplete="email" value="${esc(u.email)}">
+      </div>
+      <div class="field">
+        <label for="tp-bio">О себе</label>
+        <textarea id="tp-bio">${esc(u.bio || "")}</textarea>
+      </div>
+      <button class="btn btn-primary" type="submit">Сохранить</button>
+    </form>`;
+
+  document.getElementById("teach-profile").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    try {
+      await apiJson("/users/me/", {
+        method: "PATCH",
+        body: JSON.stringify({
+          first_name: document.getElementById("tp-first").value,
+          last_name: document.getElementById("tp-last").value,
+          email: document.getElementById("tp-email").value,
+          bio: document.getElementById("tp-bio").value,
+        }),
+      });
+      toast("Профиль сохранён.");
+    } catch (err) { toast(err.message); }
+  });
 }
 
 /* ---------- Скачивание файла (через авторизованный fetch) ---------- */

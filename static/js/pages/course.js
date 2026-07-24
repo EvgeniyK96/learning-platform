@@ -52,7 +52,9 @@ export async function pageCourse(id) {
              <div class="progress"><div class="progress-bar" style="width:${c.progress}%"></div></div>
              <span class="progress-label">${c.progress}%</span>
            </div>`
-      : `<button class="btn btn-primary" id="enroll-btn">Записаться на курс</button>`}
+      : localStorage.getItem("is_teacher")
+        ? `<p class="form-hint">Вы вошли как преподаватель — запись на курсы недоступна.</p>`
+        : `<button class="btn btn-primary" id="enroll-btn">Записаться на курс</button>`}
     </div>
     ${modules}`;
 

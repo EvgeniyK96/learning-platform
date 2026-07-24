@@ -20,12 +20,17 @@ export function renderNav() {
           <span class="user-caret" aria-hidden="true">▾</span>
         </button>
         <div class="user-dropdown" id="user-dropdown" hidden>
-          ${isTeacher ? `<a href="#/teach">${icon("clipboard-check")} Кабинет преподавателя</a>` : ""}
-          <a href="#/dashboard">${icon("user")} Личный кабинет</a>
-          <a href="#/dashboard/courses">${icon("book")} Мои курсы</a>
-          <a href="#/chat">${icon("message-square")} Сообщения</a>
-          <a href="#/dashboard/certificates">${icon("trophy")} Сертификаты</a>
-          <a href="#/dashboard/profile">${icon("settings")} Настройки профиля</a>
+          ${isTeacher ? `
+            <a href="#/teach">${icon("clipboard-check")} Кабинет преподавателя</a>
+            <a href="#/chat">${icon("message-square")} Сообщения</a>
+            <a href="#/teach/profile">${icon("settings")} Настройки профиля</a>
+          ` : `
+            <a href="#/dashboard">${icon("user")} Личный кабинет</a>
+            <a href="#/dashboard/courses">${icon("book")} Мои курсы</a>
+            <a href="#/chat">${icon("message-square")} Сообщения</a>
+            <a href="#/dashboard/certificates">${icon("trophy")} Сертификаты</a>
+            <a href="#/dashboard/profile">${icon("settings")} Настройки профиля</a>
+          `}
           <a href="#/logout" class="user-logout">${icon("log-out")} Выйти</a>
         </div>
       </div>`;

@@ -36,6 +36,10 @@ class EnrollView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
+        if request.user.is_teacher:
+            from rest_framework.exceptions import PermissionDenied
+
+            raise PermissionDenied("Преподаватели не записываются на курсы.")
         course = generics.get_object_or_404(Course, pk=pk, is_published=True)
         enrollment, created = Enrollment.objects.get_or_create(user=request.user, course=course)
         return Response(

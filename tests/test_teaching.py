@@ -102,6 +102,21 @@ def test_grade_out_of_range_rejected(api, teacher, submission):
     assert res.status_code == 400
 
 
+# ---------- преподаватель не обучается как ученик ----------
+
+def test_teacher_cannot_enroll_in_course(api, teacher, course):
+    from apps.courses.models import Enrollment
+
+    res = api(teacher).post(f"/api/courses/{course.id}/enroll/")
+    assert res.status_code == 403
+    assert not Enrollment.objects.filter(user=teacher).exists()
+
+
+def test_student_can_still_enroll(api, student, course):
+    res = api(student).post(f"/api/courses/{course.id}/enroll/")
+    assert res.status_code in (200, 201)
+
+
 # ---------- сводка ----------
 
 def test_overview_counts(api, teacher, course, submission):
